@@ -30,19 +30,19 @@
         <div>
             <div>Negativity:</div>
             <div class="progress" style="margin-bottom:10px; width:75%">
-                <div class="progress-bar bg-danger" id = "neg" role="progressbar" style="width: {{negativity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{negativity}}%</div>
+                <div class="progress-bar bg-danger" id = "neg" role="progressbar"  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{negativity}}%</div>
             </div>
         </div>
           <div>
             <div>Positivity:</div>
             <div class="progress" style="margin-bottom:10px; width:75%">
-                <div class="progress-bar bg-success" id = "pos" role="progressbar" style="width: {{positivity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{positivity}}%</div>
+                <div class="progress-bar bg-success" id = "pos" role="progressbar"  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{positivity}}%</div>
             </div>
         </div>
         
             <div>Compound:</div>
             <div class="progress" style="margin-bottom:10px; width:75%">
-                <div class="progress-bar bg-info" id = "compound" role="progressbar" style="width: {{compound}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{compound}}% </div>
+                <div class="progress-bar bg-info" id = "compound" role="progressbar"  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{compound}}% </div>
             </div>
         </div>
     </div>
@@ -110,6 +110,7 @@
                 req = new XMLHttpRequest()
                 req.onreadystatechange = function() {
                     if (req.status == 200) {
+                        
                         console.log(req.responseText)
                         emotion = document.getElementById("emotion")
                         val = JSON.parse(req.responseText)
@@ -134,40 +135,7 @@
         })}
         document.getElemen
                 
-        /*
-         var device = navigator.mediaDevices.getUserMedia({audio:true})
-         var items = []
-         device.then(stream => {
-            var recorder = new MediaRecorder(stream)
-            recorder.ondataavailable = e=> {
-                items.push(e.data)
-                if (recorder.state == "inactive") {
-
-                    var blob = new Blob(items, {type: 'audio/wav'})
-                    var audio = document.getElementById("audio")
-                    var mainaudio = document.createElement("audio")
-                    audio.innerHTML = ""
-                    mainaudio.setAttribute('controls', 'controls')
-                    audio.appendChild(mainaudio)
-                    mainaudio.innerHTML = '<source src= "'+URL.createObjectURL(blob)+'"type="audio/wav"/>'
-                
-                    var xmlhttp = new XMLHttpRequest()
-                    var url = "/audio"
-                    xmlhttp.open("POST", url, true);
-                    xmlhttp.setRequestHeader("Content-type", "audio/wav");
-                    xmlhttp.send(blob) 
-                
-                }
-            }
-            
-            document.getElementById('start').addEventListener('click', function () {
-                recorder.start()
-            })
-            document.getElementById('stop').addEventListener('click', function () {
-                recorder.stop()
-            })
-         })
-         */
+    
     </script>
 </body>
 </html>

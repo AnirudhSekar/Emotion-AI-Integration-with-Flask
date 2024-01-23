@@ -13,12 +13,11 @@ def text():
     if request.method == "POST":
         form_data = list(request.form.items())
         pos = round(analyze_sentiment(form_data[0][1])[1] * 100)
-        neg = round(analyze_sentiment(form_data[0][1])[3] * 100)
-        neu = round(analyze_sentiment(form_data[0][1])[2] * 100)
-        compound = abs(round(analyze_sentiment(form_data[0][1])[4] * 100))
-        return render_template("text.html", score =  analyze_sentiment(form_data[0][1])[0], positivity=pos, neutrality = neu, negativity = neg, compound=compound)
+        neg = round(analyze_sentiment(form_data[0][1])[2] * 100)
+        compound = abs(round(analyze_sentiment(form_data[0][1])[3] * 100))
+        return render_template("text.html", score =  analyze_sentiment(form_data[0][1])[0], positivity=pos, negativity = neg, compound=compound)
 @app.route("/audio", methods = ["POST", "GET"])
-async def upload_audio():
+async def audio():
     
     if request.method == "POST":
         content = request.data
@@ -26,8 +25,11 @@ async def upload_audio():
             f.write(content)
         actual_audio = await analyze_audio()
         results = analyze_sentiment(actual_audio)
-        
-        return jsonify({"SCORE":results[0], "POS":results[1],"NEG":results[3],"NEU":results[2], "COMPOUND":results[4]})
+        pos = round(results[1] * 100)
+        neg = round(results[3] * 100)
+        neu = round(results[2] * 100)
+        compound = abs(round(results[4] * 100))
+        return jsonify({"SCORE":results[0], "POS":results[1],"NEG":results[2], "COMPOUND":results[3]})
     return render_template("audio.html", score="Neutral")
 
 
