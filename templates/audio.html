@@ -39,13 +39,7 @@
                 <div class="progress-bar bg-success" id = "pos" role="progressbar" style="width: {{positivity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{positivity}}%</div>
             </div>
         </div>
-        <div>
-            <div>
-                <div>Neutrality:</div>
-                <div class="progress" style="margin-bottom:10px; width:75%">
-                    <div class="progress-bar bg-secondary" id = "neu" role="progressbar" style="width: {{neutrality}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{neutrality}}%</div>
-                </div>
-            </div>
+        
             <div>Compound:</div>
             <div class="progress" style="margin-bottom:10px; width:75%">
                 <div class="progress-bar bg-info" id = "compound" role="progressbar" style="width: {{compound}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{compound}}% </div>
@@ -128,13 +122,9 @@
                         neg.innerHTML = ((val.NEG)*100).toFixed(0) + "%"
                         neg.style.width = ((val.NEG)*100).toFixed(0) + "%"
                         compound = document.getElementById("compound")
+                        console.log(val.COMPOUND)
                         compound.innerHTML = ((val.COMPOUND)*100).toFixed(0) + "%"
                         compound.style.width = Math.abs(((val.COMPOUND)*100)).toFixed(0) + "%"
-                        neu = document.getElementById("neu")
-                        neu.innerHTML = ((val.NEU)*100).toFixed(0) + "%"
-                        neu.style.width = ((val.NEU)*100).toFixed(0) + "%"
-
-
                     }
                     
                 }
