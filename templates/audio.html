@@ -1,0 +1,183 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Sentiment Analyzer</title>
+</head>
+<style>
+    .audio{
+        width:400px;
+        height:600px;
+        border-radius: 20px;
+        padding: 20px;
+        border: 2px solid #757575;
+        margin:50px auto
+
+    }
+</style>
+<body>
+    {% include 'navbar.html' %}
+    <h1 style="text-align: center;">Audio Sentiment Analyzer</h1>
+    <form action = "/audio" method = "POST" style = "text-align: center;" class="form-inline">
+        <div id="audio"></div>
+        <button id="start" type="button" class="btn btn-outline-secondary my-2 my-sm-0" >Start Recording</button>
+        <button id="stop" type="button" class="btn btn-outline-secondary my-2 my-sm-0">Stop Recording</button>
+        
+    </form>
+    <p style="text-align: center;" id = "emotion">Emotion: {{score}}</p>
+
+    <div style="padding:10px">
+        <div>
+            <div>Negativity:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-danger" id = "neg" role="progressbar" style="width: {{negativity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{negativity}}%</div>
+            </div>
+        </div>
+          <div>
+            <div>Positivity:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-success" id = "pos" role="progressbar" style="width: {{positivity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{positivity}}%</div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div>Neutrality:</div>
+                <div class="progress" style="margin-bottom:10px; width:75%">
+                    <div class="progress-bar bg-secondary" id = "neu" role="progressbar" style="width: {{neutrality}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{neutrality}}%</div>
+                </div>
+            </div>
+            <div>Compound:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-info" id = "compound" role="progressbar" style="width: {{compound}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{compound}}% </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const startRecordingButton = document.getElementById('start');
+        const stopRecordingButton = document.getElementById('stop');
+
+        startRecordingButton.addEventListener('click', startRecording);
+        stopRecordingButton.addEventListener('click', stopRecording);
+
+        async function startRecording() {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) {
+                    audioChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                var audio = document.getElementById("audio")
+                var mainaudio = document.createElement("audio")
+                audio.innerHTML = ""
+                mainaudio.setAttribute('controls', 'controls')
+                audio.appendChild(mainaudio)
+                mainaudio.innerHTML = '<source src="'+URL.createObjectURL(audioBlob)+'"type="audio/wav"/>'
+                sendAudioData(audioBlob);
+                console.log(audioBlob)
+                audioChunks = [];
+            };
+
+            mediaRecorder.start();
+            startRecordingButton.disabled = true;
+            stopRecordingButton.disabled = false;
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+
+            startRecordingButton.disabled = false;
+            stopRecordingButton.disabled = true;
+        }
+        function sendAudioData(audioBlob) {
+            const file = new File([audioBlob], 'audio', {type: audioBlob.type})
+            readFile(audioBlob)
+        }
+            
+    
+
+        function readFile(input) {
+            const fr = new FileReader()
+            fr.readAsDataURL(input)
+            fr.addEventListener('load', () => {
+                res = fr.result
+                console.log(res)
+                req = new XMLHttpRequest()
+                req.onreadystatechange = function() {
+                    if (req.status == 200) {
+                        console.log(req.responseText)
+                        emotion = document.getElementById("emotion")
+                        val = JSON.parse(req.responseText)
+                        console.log(val)
+                        emotion.innerHTML = "Emotion: " + val.SCORE
+                        pos = document.getElementById("pos")
+                        pos.innerHTML = ((val.POS)*100).toFixed(0) + "%"
+                        pos.style.width = ((val.POS)*100).toFixed(0) + "%"
+                        neg = document.getElementById("neg")
+                        neg.innerHTML = ((val.NEG)*100).toFixed(0) + "%"
+                        neg.style.width = ((val.NEG)*100).toFixed(0) + "%"
+                        compound = document.getElementById("compound")
+                        compound.innerHTML = ((val.COMPOUND)*100).toFixed(0) + "%"
+                        compound.style.width = Math.abs(((val.COMPOUND)*100)).toFixed(0) + "%"
+                        neu = document.getElementById("neu")
+                        neu.innerHTML = ((val.NEU)*100).toFixed(0) + "%"
+                        neu.style.width = ((val.NEU)*100).toFixed(0) + "%"
+
+
+                    }
+                    
+                }
+                req.open("POST", "/audio", true);
+                req.send(input)
+            
+        })}
+        document.getElemen
+                
+        /*
+         var device = navigator.mediaDevices.getUserMedia({audio:true})
+         var items = []
+         device.then(stream => {
+            var recorder = new MediaRecorder(stream)
+            recorder.ondataavailable = e=> {
+                items.push(e.data)
+                if (recorder.state == "inactive") {
+
+                    var blob = new Blob(items, {type: 'audio/wav'})
+                    var audio = document.getElementById("audio")
+                    var mainaudio = document.createElement("audio")
+                    audio.innerHTML = ""
+                    mainaudio.setAttribute('controls', 'controls')
+                    audio.appendChild(mainaudio)
+                    mainaudio.innerHTML = '<source src= "'+URL.createObjectURL(blob)+'"type="audio/wav"/>'
+                
+                    var xmlhttp = new XMLHttpRequest()
+                    var url = "/audio"
+                    xmlhttp.open("POST", url, true);
+                    xmlhttp.setRequestHeader("Content-type", "audio/wav");
+                    xmlhttp.send(blob) 
+                
+                }
+            }
+            
+            document.getElementById('start').addEventListener('click', function () {
+                recorder.start()
+            })
+            document.getElementById('stop').addEventListener('click', function () {
+                recorder.stop()
+            })
+         })
+         */
+    </script>
+</body>
+</html>

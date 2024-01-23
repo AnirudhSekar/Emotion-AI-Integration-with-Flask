@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <title>Text Sentiment</title>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    <h1 style="text-align: center;">Text Sentiment Analyzer</h1>
+    <form action = "/text" method = "POST" style = "text-align: center;" class="form-inline">
+        <input class="form-inline mr-sm-2" type="text" placeholder="Enter Text Here" name="Text">
+        <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Submit">
+    </form>
+    <p style="text-align: center;">Emotion: {{score}}</p>
+    <div style="padding:10px">
+        <div>
+            <div>Negativity:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-danger" id = "neg" role="progressbar" style="width: {{negativity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{negativity}}%</div>
+            </div>
+        </div>
+          <div>
+            <div>Positivity:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-success" id = "pos" role="progressbar" style="width: {{positivity}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{positivity}}%</div>
+            </div>
+        </div>
+        <div>
+            <div>Neutrality:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-secondary" id = "neu" role="progressbar" style="width: {{neutrality}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{neutrality}}%</div>
+            </div>
+        </div>
+        <div>
+            <div>Compound:</div>
+            <div class="progress" style="margin-bottom:10px; width:75%">
+                <div class="progress-bar bg-info" id = "compound" role="progressbar" style="width: {{compound}}%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">{{compound}}% </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
