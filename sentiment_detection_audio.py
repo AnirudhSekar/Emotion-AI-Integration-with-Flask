@@ -1,5 +1,6 @@
 import assemblyai as aai
-async def analyze_audio():
+import os
+def analyze_audio():
     aai.settings.api_key = "24852772dd4b4e43a8c7591c49466337"
     transcriber = aai.Transcriber()
 
@@ -7,3 +8,4 @@ async def analyze_audio():
     # transcript = transcriber.transcribe("./my-local-audio-file.wav")
 
     return transcript.text
+print(analyze_audio())
