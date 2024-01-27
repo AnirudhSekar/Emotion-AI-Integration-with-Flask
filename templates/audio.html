@@ -18,12 +18,12 @@
 <body>
     {% include 'navbar.html' %}
     <h1 style="text-align: center;">Audio Sentiment Analyzer</h1>
-    <form action = "/audio" method = "POST" style = "text-align: center;" class="form-inline">
+    <div style="text-align: center;">
         <div id="audio"></div>
         <button id="start" type="button" class="btn btn-outline-secondary my-2 my-sm-0" >Start Recording</button>
         <button id="stop" type="button" class="btn btn-outline-secondary my-2 my-sm-0">Stop Recording</button>
         
-    </form>
+    </div>
     <p style="text-align: center;" id = "emotion">Emotion: {{score}}</p>
 
     <div style="padding:10px">
@@ -95,18 +95,8 @@
             stopRecordingButton.disabled = true;
         }
         function sendAudioData(audioBlob) {
-            const file = new File([audioBlob], 'audio', {type: audioBlob.type})
-            readFile(audioBlob)
-        }
             
-    
-
-        function readFile(input) {
-            const fr = new FileReader()
-            fr.readAsDataURL(input)
-            fr.addEventListener('load', () => {
-                res = fr.result
-                console.log(res)
+            
                 req = new XMLHttpRequest()
                 req.onreadystatechange = function() {
                     if (req.status == 200) {
@@ -130,11 +120,9 @@
                     
                 }
                 req.open("POST", "/audio", true);
-                req.send(input)
+                req.send(audioBlob)
             
-        })}
-        document.getElemen
-                
+        }                
     
     </script>
 </body>
